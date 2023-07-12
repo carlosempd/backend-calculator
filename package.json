@@ -1,0 +1,15 @@
+{
+  "name": "calculator-backend",
+  "version": "1.0.0",
+  "description": "Basic backend app for a calculator api with nodejs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "C. Maldonado",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
