@@ -1,10 +1,14 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const calculatorRoutes = require('./routes/calculatorRoutes')
 
 app.use(cors())
-app.use(express.json())
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(bodyParser.json())
 app.use('/api/v1/calc', calculatorRoutes)
 
 app.get('/', (req, res) => {
