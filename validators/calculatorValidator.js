@@ -1,8 +1,17 @@
 const Joi = require('joi')
 
+const digitRules = Joi.number().required().precision(2).max(9999999).min(-9999999)
+
 const twoDigitsOperationSchema = Joi.object({
-    firstDigit: Joi.number().required().precision(2).max(9999999).min(-9999999),
-    secondDigit: Joi.number().required().precision(2).max(9999999).min(-9999999)
+    firstDigit: digitRules,
+    secondDigit: digitRules
 })
 
-module.exports = twoDigitsOperationSchema
+const oneDigitsOperationSchema = Joi.object({
+    digit: digitRules
+})
+
+module.exports = {
+    oneDigitsOperationSchema,
+    twoDigitsOperationSchema
+}

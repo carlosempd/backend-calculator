@@ -1,4 +1,4 @@
-const twoDigitsOperationSchema = require("../validators/calculatorValidator");
+const { twoDigitsOperationSchema } = require("../validators/calculatorValidator");
 
 const twoDigitsOperationMiddleware = (req, res, next) => {
     const { error, value } = twoDigitsOperationSchema.validate(req.body);
