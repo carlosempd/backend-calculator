@@ -34,9 +34,16 @@ const division = ((req, res) => {
     })
 })
 
+const squareRoot = ((req, res) => {
+    res.status(200).json({
+        result: Math.sqrt(req.value.digit)
+    })
+})
+
 module.exports = {
     addition,
     substraction,
     multiplication,
-    division
+    division,
+    squareRoot
 }
