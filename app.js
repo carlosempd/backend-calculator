@@ -1,15 +1,34 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const dbConfig = require('./config/connectDB')
+const bodyParser = require('body-parser')
 const calculatorRoutes = require('./routes/calculatorRoutes')
+const authRoutes = require('./routes/authRoutes')
+require('dotenv').config()
 
 app.use(cors())
-app.use(express.json())
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(bodyParser.json())
 app.use('/api/v1/calc', calculatorRoutes)
+app.use('/api/v1/auth', authRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello world')
 });
+
+try {
+    dbConfig(process.env.MONGO_URL, process.env.DB_NAME)
+        .then(() => {
+            console.log('db connection established');
+        }).catch(error => {
+            throw error
+        })
+} catch (error) {
+    throw new Error(`Database connection error: ${ error }`)
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
