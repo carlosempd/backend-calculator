@@ -28,7 +28,6 @@ const authenticate = async(req, res, next) => {
         req.user = {
             _id: user._id,
             email: user.email,
-            balance: user.balance
         }
         next()
     } catch (error) {
