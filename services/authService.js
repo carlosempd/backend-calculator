@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const STATUS = require('../utils/status')
+const User = require('../models/user')
 require('dotenv').config()
 
 const users = require('../mock/users.json')
@@ -8,18 +9,16 @@ const users = require('../mock/users.json')
 const loginService = async(req, res) => {
     try {
         const { email, password } = req.value
-        const user = users.filter(element => element.email === email)
-
+        const user = await User.findOne({ email })
         if (!user) {
-            res.status(401).json({
+            return res.status(401).json({
                 error: 'Invalid credentials'
             })
         }
 
-        // const isPasswordValid = await bcrypt.compare(password, user.password);
-        const isPasswordValid = true;
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if(!isPasswordValid) {
-            res.status(401).json({
+            return res.status(401).json({
                 error: 'Invalid credentials'
             })
         }
@@ -42,12 +41,13 @@ const registerService = async(req, res) => {
     try {
         const { ...user } = req.value
         const hashedPassword = await bcrypt.hash(user.password, +process.env.SALT_ROUNDS)
-        // TODO: Create and save the new user
-        const newUser = {
+        const newUser = new User({
             email: user.email,
-            password: user.password,
+            password: hashedPassword,
             status: STATUS.ACTIVE
-        }
+        })
+
+        await newUser.save()
 
         res.status(201).json({
             message: 'User created succesfully'
