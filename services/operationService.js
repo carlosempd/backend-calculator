@@ -34,6 +34,7 @@ const getOperationsPaginated = async(req, res) => {
 
     try {
         const list = await Operation.find({ user: req.user._id })
+            .where({ isDeleted: false })
             .limit(limit*1)
             .skip((page-1) * limit)
             .sort({ date: -1 })
@@ -50,7 +51,25 @@ const getOperationsPaginated = async(req, res) => {
     }
 }
 
+const deleteOperation = async(req, res) => {
+    try {
+        const id = req.params.id
+        const operation = await Operation.findById(id)
+        operation.isDeleted = true;
+        await operation.save()
+        res.status(200).json({
+            message: 'Operation deleted'
+        })
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+    
+}
+
 module.exports = {
     createOperation,
-    getOperationsPaginated
+    getOperationsPaginated,
+    deleteOperation,
 }

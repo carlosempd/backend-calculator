@@ -20,7 +20,7 @@ const operationSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        defaul: Date.now
+        defaul: new Date()
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -28,6 +28,10 @@ const operationSchema = new mongoose.Schema({
     },
     result: {
         type: String
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 })
 
