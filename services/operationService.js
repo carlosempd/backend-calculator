@@ -1,11 +1,16 @@
 const Operation = require('../models/operation')
+const { updateUserBalance } = require('./userService')
 
 const createOperation = async(req, res) => {
-    console.log(req.value);
-    console.log(req.user);
-    console.log(req.operation);
-
     try {
+        const remainingBalance = await updateUserBalance(req.user._id, req.operation.cost)
+
+        if (remainingBalance < 0) {
+            return res.status(403).json({
+                message: 'Not enough credit'
+            })
+        }
+
         const operation = new Operation({
             type: req.operation.type,
             user: req.user._id,
@@ -14,7 +19,7 @@ const createOperation = async(req, res) => {
         })
 
         await operation.save()
-        
+
         res.status(200).json({
             result: req.operation.result
         })
