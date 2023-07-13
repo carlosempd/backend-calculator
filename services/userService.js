@@ -2,8 +2,8 @@ const User = require('../models/user')
 
 const updateUserBalance = async(id, cost) => {
     try {
-        const user = await User.findById(id);
-        const newBalance = user.balance - cost;
+        const user = await User.findById(id)
+        const newBalance = user.balance - cost
         if (newBalance < 0) {
             return -1
         }

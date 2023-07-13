@@ -15,7 +15,8 @@ const createOperation = async(req, res) => {
             type: req.operation.type,
             user: req.user._id,
             cost: req.operation.cost,
-            result: req.operation.result
+            result: req.operation.result,
+            date: new Date()
         })
 
         await operation.save()
@@ -28,6 +29,28 @@ const createOperation = async(req, res) => {
     }
 }
 
+const getOperationsPaginated = async(req, res) => {
+    const { page = 1, limit = 10} = req.query;
+
+    try {
+        const list = await Operation.find({ user: req.user._id })
+            .limit(limit*1)
+            .skip((page-1) * limit)
+            .sort({ date: -1 })
+        
+        const count = await Operation.countDocuments();
+
+        res.json({
+            data: list,
+            totalPages: Math.ceil(count/limit),
+            currentPage: page
+        })
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
-    createOperation
+    createOperation,
+    getOperationsPaginated
 }
