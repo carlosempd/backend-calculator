@@ -1,7 +1,9 @@
 const axios = require('axios');
+require('dotenv').config()
 
-const apiKey = 'd79dda8b-4235-455f-9557-7b5645b3e34d';
-const url = `https://api.random.org/json-rpc/4/invoke`;
+const apiKey = process.env.RANDOM_ORG_API_KEY
+const url = process.env.RANDOM_ORG_URL
+const charactersAvailableToGenerate = process.env.STRINGS_TO_GENERATE
 
 const requestData = {
     jsonrpc: "2.0",
@@ -10,7 +12,7 @@ const requestData = {
         apiKey,
         n: 1,
         length: 20,
-        characters: "abcdefghijklmnopqrstuvwxyz123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        characters: charactersAvailableToGenerate,
         replacement: true
     },
     id: 42
