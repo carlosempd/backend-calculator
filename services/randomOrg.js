@@ -20,7 +20,6 @@ const requestData = {
 
 const getRandomString = async() => {
     const randomOrgResult = await axios.post(url, requestData)
-    console.log(randomOrgResult.data.result.random.data[0]);
     return randomOrgResult.data.result.random.data[0]
 }
 
