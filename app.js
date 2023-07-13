@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const calculatorRoutes = require('./routes/calculatorRoutes')
+const authRoutes = require('./routes/authRoutes')
 require('dotenv').config()
 
 app.use(cors())
@@ -11,6 +12,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 app.use('/api/v1/calc', calculatorRoutes)
+app.use('/api/v1/auth', authRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello world')
