@@ -5,7 +5,8 @@ const {
     substraction, 
     multiplication, 
     division, 
-    squareRoot } = require('../controllers/calculatorController')
+    squareRoot, 
+    randomString } = require('../controllers/calculatorController')
 const twoDigitsOperationMiddleware = require('../middlewares/twoDigitsOperationMidlleware')
 const oneDigitsOperationMiddleware = require('../middlewares/oneDigitOperationMiddleware')
 
@@ -14,5 +15,6 @@ router.post('/substraction', twoDigitsOperationMiddleware, substraction)
 router.post('/multiplication', twoDigitsOperationMiddleware, multiplication)
 router.post('/division', twoDigitsOperationMiddleware, division)
 router.post('/square-root', oneDigitsOperationMiddleware, squareRoot)
+router.get('/random-string', randomString)
 
 module.exports = router
