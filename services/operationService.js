@@ -30,11 +30,19 @@ const createOperation = async(req, res) => {
 }
 
 const getOperationsPaginated = async(req, res) => {
-    const { page = 1, limit = 10} = req.query;
+    const { page = 1, limit = 10, date, type} = req.query;
+    const filter = {}
 
+    if (type) {
+        filter.type = { $regex: `${type}`, $options: 'i'};
+    }
+    if(date) {
+        filter.date = { $gte: new Date(date) };
+    }
+    console.log(filter);
     try {
         const list = await Operation.find({ user: req.user._id })
-            .where({ isDeleted: false })
+            .where({ isDeleted: false, ...filter })
             .limit(limit*1)
             .skip((page-1) * limit)
             .sort({ date: -1 })
