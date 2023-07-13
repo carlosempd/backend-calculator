@@ -1,6 +1,6 @@
 const { authUserSchema } = require("../validators/authValidator");
 const jwt = require('jsonwebtoken');
-const users = require('../mock/users.json')
+const User = require('../models/user')
 require('dotenv').config()
 
 const authUserMiddleware = (req, res, next) => {
@@ -16,17 +16,20 @@ const authUserMiddleware = (req, res, next) => {
     next()
 }
 
-const authenticate = (req, res, next) => {
+const authenticate = async(req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
-        const user = users.filter(element => element.id === decodedToken.userId)
-
+        const user = await User.findById(decodedToken.userId)
         if (!user) {
             throw new Error("Please try again")
         }
-
-        req.user = user
+        
+        req.user = {
+            _id: user._id,
+            email: user.email,
+            balance: user.balance
+        }
         next()
     } catch (error) {
         res.status(401).json({
