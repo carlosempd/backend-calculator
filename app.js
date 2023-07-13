@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const calculatorRoutes = require('./routes/calculatorRoutes')
+require('dotenv').config()
 
 app.use(cors())
 app.use(bodyParser.urlencoded({
