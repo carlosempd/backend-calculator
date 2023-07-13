@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require('dotenv').config()
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -12,6 +13,11 @@ const userSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true
+    },
+    balance: {
+        type: Number,
+        required: true,
+        default: process.env.INITIAL_BALANCE
     }
 })
 
