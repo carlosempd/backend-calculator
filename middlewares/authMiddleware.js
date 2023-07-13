@@ -1,7 +1,7 @@
-const { loginSchema } = require("../validators/authValidator");
+const { authUserSchema } = require("../validators/authValidator");
 
-const loginMiddleware = (req, res, next) => {
-    const { error, value } = loginSchema.validate(req.body)
+const authUserMiddleware = (req, res, next) => {
+    const { error, value } = authUserSchema.validate(req.body)
 
     if (error) {
         return res.status(400).json({
@@ -14,5 +14,5 @@ const loginMiddleware = (req, res, next) => {
 }
 
 module.exports = {
-    loginMiddleware
+    authUserMiddleware
 }

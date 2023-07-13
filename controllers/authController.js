@@ -1,12 +1,14 @@
+const { loginService, registerService } = require('../services/authService')
 
 const login = ((req, res) => {
-    const { email, password } = req.value
-    
-    res.json({
-        message: 'login ok!'
-    })
+    loginService(req, res)
+})
+
+const register = ((req, res) => {
+    registerService(req, res)
 })
 
 module.exports = {
-    login
+    login,
+    register
 }
