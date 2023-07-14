@@ -5,6 +5,8 @@ This is NodeJS application that serves endpoints to perform calculator operation
 
 Every registered user gets a credit of *500 units*. This units are spent with every request to perform calculations. You can configure the initial amount of credits and also the cost per operations with the environment variables.
 
+Since this is a calculator application in Node.js, which is a relatively simple application, and you don't need complex queries or transactions, MongoDB may be a better choice than a relational database like PostgreSQL. MongoDB's flexibility and ease of use make it a good fit for simple applications like this.
+
 A Bearer token will be needed to excecute all endpoints.
 
 The app provides two endpoints to register a new user and to login with an existing user.
@@ -26,7 +28,44 @@ Here is a list of the endponts:
 | --- | --- | --- | --- |
 /auth/login | POST | Login with one of the creted users (Body requires email and password) | ```{token: "SomeValidToken"}``` |
 /auth/register | POST | Create a new user (Body requires email and password) | ```{ message: 'User created succesfully' }```
+/seed | GET | Create users and operations with preloaded data |  ``` { message: SEED OK } ``` |
 
+
+
+> #### After succesfully seed, a valid user to login to the app is 
+>
+> - **email**: jose@gmail.com
+> - **password**: 123456
+>
+> 
+
+## Entities
+There are two main entities in this project, 'User' and ' Operation'. \
+ \
+**User** refers to the user who performs an operation
+```bash
+User {
+    email: string, valid email,
+    password: string,
+    status: string,
+    balance: number
+}
+```
+ \
+**Operation** refers to the operation that can be performed on calculator (addition, substraction, multiplication, division, square root, random string)
+```bash
+Operation {
+    type: string, Enum value,
+    cost: number,
+    date: Date,
+    user: id of the user who made the operation,
+    result: parsed as string,
+    isDeleted: boolean
+}
+```
+
+This entities structure can be built in a more decoupled way adding a third entity,
+for example **Records**, who would be responsible for storing every operation made by an user. This would allow **Operation** entity to act as a validator entity who would store every valid operation in the app. In this case it was made only with two entities due to a typo in the description of the challenge.
 
 
 ## Environment Variables

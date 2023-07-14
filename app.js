@@ -7,6 +7,9 @@ const calculatorRoutes = require('./routes/calculatorRoutes')
 const authRoutes = require('./routes/authRoutes')
 const operationRoutes = require('./routes/operationRoutes')
 const seedRoutes = require('./routes/seedRoutes')
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 require('dotenv').config()
 
 app.use(cors())
@@ -19,9 +22,7 @@ app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/operations', operationRoutes)
 app.use('/api/v1/seed', seedRoutes)
 
-app.get('/', (req, res) => {
-    res.send('Hello world')
-});
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 try {
     dbConfig(process.env.MONGO_URL, process.env.DB_NAME)
