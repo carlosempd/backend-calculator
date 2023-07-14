@@ -18,6 +18,12 @@ const requestData = {
     id: 42
 }
 
+/**
+ * Get random string from random.org API
+ * 
+ * @returns {Promise<void>} A Promise that resolves when 
+ * the string is retrieved
+ */
 const getRandomString = async() => {
     const randomOrgResult = await axios.post(url, requestData)
     return randomOrgResult.data.result.random.data[0]
