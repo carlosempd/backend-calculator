@@ -1,6 +1,15 @@
 const Operation = require('../models/operation')
 const { updateUserBalance } = require('./userService')
 
+/**
+ * Create a new operation
+ * 
+ * @param {object} req Request object
+ * @param {object} res Response object
+ * @returns {Promise<void>} A Promise that resolves when 
+ * the operation is created and the result is sent
+ * via response
+ */
 const createOperation = async(req, res) => {
     try {
         const remainingBalance = await updateUserBalance(req.user._id, req.operation.cost)
@@ -29,6 +38,16 @@ const createOperation = async(req, res) => {
     }
 }
 
+/**
+ * Get the paginated list of operations
+ * performed by logged user
+ * 
+ * @param {object} req Request object
+ * @param {object} res Response object
+ * @returns {Promise<void>} A Promise that resolves when 
+ * the list is retrieved and the pagianted result is sent
+ * via response
+ */
 const getOperationsPaginated = async(req, res) => {
     const { page = 1, limit = 10, date, type} = req.query;
     const filter = {}
@@ -55,10 +74,20 @@ const getOperationsPaginated = async(req, res) => {
             currentPage: page
         })
     } catch (error) {
-        
+        res.status(500).json({
+            error: error.message
+        })
     }
 }
 
+/**
+ * Delete an operation by its ID
+ * 
+ * @param {object} req Request object
+ * @param {object} res Response object
+ * @returns {Promise<void>} A Promise that resolves when 
+ * the soft delete is completed and a message is sent via response
+ */
 const deleteOperation = async(req, res) => {
     try {
         const id = req.params.id

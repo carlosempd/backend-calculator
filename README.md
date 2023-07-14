@@ -86,3 +86,12 @@ $ npm run start
 # watch mode
 $ npm run start:dev
 ```
+
+## Test
+
+Unit tests are built with jest
+
+```bash
+# unit tests
+$ npm test
+```

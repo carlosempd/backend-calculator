@@ -6,6 +6,14 @@ require('dotenv').config()
 
 const users = require('../mock/users.json')
 
+/**
+ * Perform login of user and retrieves a jwt token
+ * 
+ * @param {object} req Request object
+ * @param {object} res Response object
+ * @returns {Promise<void>} A promise
+ * that resolves to a token (if success) or error message
+ */
 const loginService = async(req, res) => {
     try {
         const { email, password } = req.value
@@ -37,6 +45,14 @@ const loginService = async(req, res) => {
     }
 }
 
+/**
+ * Register a new user
+ * 
+ * @param {object} req Request object
+ * @param {object} res Response object
+ * @returns {Promise<void>} A promise
+ * that resolves to a message indicating success or failure
+ */
 const registerService = async(req, res) => {
     try {
         const { ...user } = req.value
