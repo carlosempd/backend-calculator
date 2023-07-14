@@ -20,7 +20,9 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
     "mongodb": "^5.7.0",
-    "mongoose": "^7.3.4"
+    "mongoose": "^7.3.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "jest": "^29.6.1",

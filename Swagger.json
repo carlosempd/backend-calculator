@@ -1,0 +1,636 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a simple calculator NodeJS API project",
+        "version": "1.0.0",
+        "title": "Calculator API"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api/v1",
+    "securityDefinitions": {
+        "Bearer": {
+          "type": "apiKey",
+          "name": "Authorization",
+          "in": "header",
+          "description": "Enter the token with the `Bearer: ` prefix, e.g. \"Bearer abcde12345\"."
+        }
+      },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": ["active", "inactive"]
+                },
+                "balance": {
+                    "type": "number"
+                }
+            }
+        },
+        "Operation": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": ["addition", "substraction", "multiplication", "division", "square_root", "random_string"]
+                },
+                "cost": {
+                    "type": "number"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "string"
+                },
+                "isDeleted": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "authBody": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "loginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "errorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "failLoginResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Invalid credentials"
+
+                }
+            }
+        },
+        "registerResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User created succesfully"
+
+                }
+            }
+        },
+        "calculatorResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "string"
+
+                }
+            }
+        },
+        "twoDigitsOperation": {
+            "type": "object",
+            "properties": {
+                "firstDigit": {
+                    "type": "number"
+                },
+                "secondDigit": {
+                    "type": "number"
+                }
+            }
+        },
+        "oneDigitOperation": {
+            "type": "object",
+            "properties": {
+                "digit": {
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "paths": {
+        "/seed": {
+            "get": {
+                "summary": "Seeds database",
+                "tags": ["Seed"],
+                "description":  "seeds database with users and operations",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "SEED OK"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "Authenticate user",
+                "tags": ["Auth"],
+                "description":  "Authenticate user",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "required": true,
+                    "name": "body",
+                    "schema": {
+                        "type": "object",
+                        "$ref": "#/definitions/authBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/loginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Create new user",
+                "description":  "create new user",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "required": true,
+                    "name": "body",
+                    "schema": {
+                        "type": "object",
+                        "$ref": "#/definitions/authBody"
+                    }
+                }],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/registerResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/calc/addition": {
+            "post": {
+                "tags": ["Calculator"],
+                "security": [{
+                    "Bearer": []
+                }],
+                "summary": "Performs addition",
+                "description":  "Performs addition",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "required": true,
+                    "name": "body",
+                    "schema": {
+                        "type": "object",
+                        "$ref": "#/definitions/twoDigitsOperation"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/calculatorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/calc/substraction": {
+            "post": {
+                "tags": ["Calculator"],
+                "security": [{
+                    "Bearer": []
+                }],
+                "summary": "Performs substraction",
+                "description":  "Performs substraction",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "required": true,
+                    "name": "body",
+                    "schema": {
+                        "type": "object",
+                        "$ref": "#/definitions/twoDigitsOperation"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/calculatorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/calc/multiplication": {
+            "post": {
+                "tags": ["Calculator"],
+                "security": [{
+                    "Bearer": []
+                }],
+                "summary": "Performs multiplication",
+                "description":  "Performs multiplication",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "required": true,
+                    "name": "body",
+                    "schema": {
+                        "type": "object",
+                        "$ref": "#/definitions/twoDigitsOperation"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/calculatorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/calc/division": {
+            "post": {
+                "tags": ["Calculator"],
+                "security": [{
+                    "Bearer": []
+                }],
+                "summary": "Performs division",
+                "description":  "Performs division",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "required": true,
+                    "name": "body",
+                    "schema": {
+                        "type": "object",
+                        "$ref": "#/definitions/twoDigitsOperation"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/calculatorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/calc/square-root": {
+            "post": {
+                "tags": ["Calculator"],
+                "security": [{
+                    "Bearer": []
+                }],
+                "summary": "Performs square root",
+                "description":  "Performs square root",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "required": true,
+                    "name": "body",
+                    "schema": {
+                        "type": "object",
+                        "$ref": "#/definitions/oneDigitOperation"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/calculatorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/calc/random-string": {
+            "get": {
+                "tags": ["Calculator"],
+                "security": [{
+                    "Bearer": []
+                }],
+                "summary": "Generates a random string",
+                "description":  "Generates a random string from random.org",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/calculatorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/operations/list": {
+            "get": {
+                "summary": "Retrieves a list of operations",
+                "security": [{
+                    "Bearer": []
+                }],
+                "tags": ["Operations"],
+                "description":  "Retrieves a list of operations performed by logged user",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": false,
+                        "description": "Number of items to retrieve",
+                        "schema": {
+                            "type": "number",
+                            "example": "10"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": false,
+                        "description": "Number of page",
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "date",
+                        "required": false,
+                        "description": "Date to filter (retrieves elementes from the page sent)",
+                        "schema": {
+                            "type": "string",
+                            "example": "2023-07-10"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "required": false,
+                        "description": "Type to filter operations",
+                        "schema": {
+                            "type": "string",
+                            "example": "addition"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "currentPage": {
+                                    "type": "number",
+                                    "example": "1"
+                                },
+                                "totalPage": {
+                                    "type": "number",
+                                    "example": "2"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Operation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/operations/{id}": {
+            "delete": {
+                "summary": "Soft deletes an operation",
+                "security": [{
+                    "Bearer": []
+                }],
+                "tags": ["Operations"],
+                "description":  "Soft deletes an operation by its ID",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": false,
+                        "description": "ID of the operation to delete",
+                        "schema": {
+                            "type": "string",
+                            "example": "64b14b19e2427c593ceaa9e5"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Operation deleted"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/failLoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
