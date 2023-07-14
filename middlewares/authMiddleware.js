@@ -3,6 +3,15 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user')
 require('dotenv').config()
 
+/**
+ * Validates the body of an auth request
+ * and attach it to request in "value" property
+ * 
+ * @param {object} req Request object
+ * @param {object} res Response object
+ * @param {function} next handler in next chain of request
+ * 
+ */
 const authUserMiddleware = (req, res, next) => {
     const { error, value } = authUserSchema.validate(req.body)
 
@@ -16,6 +25,15 @@ const authUserMiddleware = (req, res, next) => {
     next()
 }
 
+/**
+ * Validates the token and if is ok
+ * attach user info in request
+ * 
+ * @param {object} req Request object
+ * @param {object} res Response object
+ * @param {function} next next handler chain of request
+ * 
+ */
 const authenticate = async(req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
