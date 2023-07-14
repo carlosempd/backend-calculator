@@ -5,7 +5,7 @@
         "version": "1.0.0",
         "title": "Calculator API"
     },
-    "host": "localhost:3000",
+    "host": "https://calculator-be.onrender.com",
     "basePath": "/api/v1",
     "securityDefinitions": {
         "Bearer": {
