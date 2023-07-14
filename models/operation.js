@@ -10,7 +10,7 @@ const operationSchema = new mongoose.Schema({
             OPERATION_TYPE.SUBSTRACTION,
             OPERATION_TYPE.DIVISION,
             OPERATION_TYPE.MULTIPLICATION,
-            OPERATION_TYPE.SQUARE_ROOTN,
+            OPERATION_TYPE.SQUARE_ROOT,
             OPERATION_TYPE.RANDOM_STRING
         ]
     },
