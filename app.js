@@ -8,7 +8,7 @@ const authRoutes = require('./routes/authRoutes')
 const operationRoutes = require('./routes/operationRoutes')
 const seedRoutes = require('./routes/seedRoutes')
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('./Swagger.json');
 
 require('dotenv').config()
 
