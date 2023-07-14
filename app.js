@@ -5,6 +5,7 @@ const dbConfig = require('./config/connectDB')
 const bodyParser = require('body-parser')
 const calculatorRoutes = require('./routes/calculatorRoutes')
 const authRoutes = require('./routes/authRoutes')
+const operationRoutes = require('./routes/operationRoutes')
 require('dotenv').config()
 
 app.use(cors())
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 app.use('/api/v1/calc', calculatorRoutes)
 app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/operations', operationRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello world')

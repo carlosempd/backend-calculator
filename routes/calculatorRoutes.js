@@ -11,11 +11,11 @@ const twoDigitsOperationMiddleware = require('../middlewares/twoDigitsOperationM
 const oneDigitsOperationMiddleware = require('../middlewares/oneDigitOperationMiddleware')
 const { authenticate } = require('../middlewares/authMiddleware')
 
-router.post('/addition', twoDigitsOperationMiddleware, addition)
-router.post('/substraction', twoDigitsOperationMiddleware, substraction)
-router.post('/multiplication', twoDigitsOperationMiddleware, multiplication)
-router.post('/division', twoDigitsOperationMiddleware, division)
-router.post('/square-root', oneDigitsOperationMiddleware, squareRoot)
+router.post('/addition', authenticate, twoDigitsOperationMiddleware, addition)
+router.post('/substraction', authenticate, twoDigitsOperationMiddleware, substraction)
+router.post('/multiplication', authenticate, twoDigitsOperationMiddleware, multiplication)
+router.post('/division', authenticate, twoDigitsOperationMiddleware, division)
+router.post('/square-root', authenticate, oneDigitsOperationMiddleware, squareRoot)
 router.get('/random-string', authenticate, randomString)
 
 module.exports = router

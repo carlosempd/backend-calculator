@@ -4,6 +4,8 @@
   "description": "Basic backend app for a calculator api with nodejs",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
+    "start:dev": "node --watch app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "C. Maldonado",
