@@ -26,8 +26,16 @@ Here is a list of the endponts:
 | --- | --- | --- | --- |
 /auth/login | POST | Login with one of the creted users (Body requires email and password) | ```{token: "SomeValidToken"}``` |
 /auth/register | POST | Create a new user (Body requires email and password) | ```{ message: 'User created succesfully' }```
+/seed | GET | Create users and operations with preloaded data |  ``` { message: SEED OK } ``` |
 
 
+
+> #### After succesfully seed, a valid user to login to the app is 
+>
+> - **email**: jose@gmail.com
+> - **password**: 123456
+>
+>  
 
 ## Environment Variables
 
