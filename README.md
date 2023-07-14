@@ -36,7 +36,6 @@ here is an example with all the required env variables
 
 | **.env** |
 | --- | 
-| 
 ```
 RANDOM_ORG_API_KEY='apiKeyOfRandom.org'
 RANDOM_ORG_URL='https://api.random.org/json-rpc/4/invoke'
