@@ -4,8 +4,6 @@ const STATUS = require('../utils/status')
 const User = require('../models/user')
 require('dotenv').config()
 
-const users = require('../mock/users.json')
-
 /**
  * Perform login of user and retrieves a jwt token
  * 
